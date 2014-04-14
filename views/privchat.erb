@@ -45,7 +45,7 @@
     <a class="emojibtn" href="#">:)</a>
     <a class="submitbtn" href="#">〉</a>
     <div class="input">
-      <form method="POST" action="/channel/<%= @channel %>">
+      <form method="POST" action="/privchat/<%= @channel %>">
         <input name="mesg" />
       </form>
     </div>
@@ -65,8 +65,8 @@
     });
     $(document).scrollTop($(document).height());
   </script>
-  <script>var channel = "<%= @channel.gsub("#", "") %>";</script>
+  <script>var channel = "<%= @channel %>";</script>
   <script type="text/javascript" src="/assets/script.js"></script>
-  <script>pollNewMesg();</script>
+  <script>pollNewPrivMesg();</script>
 </body>
 </html>

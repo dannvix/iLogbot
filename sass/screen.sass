@@ -1,135 +1,7 @@
-@import "compass"
-@import "compass/reset"
-@import "solarized"
+*
+  // box-shadow: 0 0 1px hsl(0, 0%, 25%)
 
-$row-color-odd: rgba(0,0,0,.33)
-$row-color-even: rgba(0,0,0,.15)
-
-@-webkit-keyframes blink
-  from
-    background-color: $yellow
-  to
-    background-color: transparent
-
-@keyframes blink
-  from
-    background-color: $yellow
-  to
-    background-color: transparent
-
-html *
-  // @include box-shadow(0 0 0 1px darken(white, 75%))
-  color-profile: sRGB
-  rendering-intent: auto
-
-body
-  background: $base02
-  color: $base00
-  font-family: "Helvetica", sans-serif
-  a
-    color: $blue
-    text-decoration: none
-    &:hover
-      background: $blue
-      color: $base03
-
-
-.wrapper
-  width: 90%
-  margin: 0 auto
-
-
-.header
-  padding: 30px 0
-  text-align: center
-  h1
-    @include inline-block
-    font-size: 32pt
-    font-family: "Ropa Sans", sans-serif
-    color: $base02
-    font-weight: bold
-    background: $green
-    padding: 5px 20px
-    text-transform: uppercase
-
-
-.footer
-  padding: 40px 0 30px 0
-  font-family: "Ropa Sans", sans-serif
-  text-transform: uppercase
-  text-align: center
-
-
-.body
-  .channel, .date, .scroll_switch
-    color: $cyan
-    font: 14pt/20px "Droid Sans Mono", monospace
-    @include inline-block
-    @include border-radius(5px)
-    cursor: pointer
-
-    &:hover
-      background-color: $base03
-  .channel
-    font-weight: bold
-    padding: 5px 10px
-  .date
-    width: 7.2em
-    height: 30px
-    background: transparent url('images/img_dropdown_violet.svg') no-repeat 6em 60%
-    @include background-size(10%)
-    color: $violet
-    letter-spacing: -2px
-    border: none
-    padding: 0 10px
-    outline: none
-    @include appearance(none)
-    &::after
-      content: '\25BE'
-
-  .scroll_switch
-    @include float-right
-    clear: both
-    padding: 5px 10px
-    color: darken($green, 5%)
-  .scroll_switch_off
-    color: darken($green, 15%)
-    text-decoration: line-through
-    
-  .logs
-    list-style-type: none
-    font-family: "Droid Sans Mono", monospace
-    margin: 0 10px
-    li
-      margin-top: 12px
-      line-height: 1.33
-
-      &.new-arrival
-        -webkit-animation: blink 500ms ease-out
-        animation: blink 500ms ease-out
-
-      .time, .nick
-        float: left
-      .time, .nick, .msg
-        display: block
-      .time
-        width: 70px
-        vertical-align: text-top
-        letter-spacing: -2px
-      .nick
-        width: 110px
-        color: $yellow
-        text-align: right
-        letter-spacing: -1px
-        margin-left: 5px
-      .msg
-        color: $base1
-        margin-left: 200px
-        .nick
-          width: auto
-          margin-left: 0px
-
-.wordwrap
+@mixin word-wrap
   -ms-word-break: break-all
   word-break: break-all
   //Non standard for webkit
@@ -138,46 +10,170 @@ body
   -moz-hyphens: auto
   hyphens: auto
 
+@-webkit-keyframes slide-in
+  from
+    left: 100%
+    opacity: 0
+  to
+    left: 0
+    opacity: 1
 
-// quick navigation
-.quick-nav
+@keyframes slide-in
+  from
+    left: 100%
+    opacity: 0
+  to
+    left: 0
+    opacity: 1
+
+body
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif
+  background: #F7F7F7
+  min-width: 320px
+
+.navbar
+  z-index: 1
   position: fixed
-  top: 45%
-  right: 3%
-  @include inline-block
+  top: 0
+  width: 100%
+  height: 44px
+  min-height: 44px
+  line-height: 44px
+  font-size: 17px
+  background: #F3F3F3
   text-align: center
+  border-bottom: 1px solid hsl(0, 0%, 75%)
+  h1
+    display: inline-block
+    font-weight: 500
+  a
+    text-decoration: none
+    color: #4CD964
+  a.backbtn
+    position: absolute
+    left: 16px
+  a.optbtn
+    position: absolute
+    right: 16px
 
-.nav_page-up,
-.nav_page-down
-  background-color: $base03
-  color: $base1
-  font-size: 14pt
-  padding: 5px
-  @include border-radius(5px)
-  &:hover
-    cursor: pointer
-    background-color: $base01
-    color: $base03
+.infobar
+  z-index: 1
+  position: fixed
+  top: 45px
+  width: 100%
+  height: 19px
+  min-height: 19px
+  line-height: 19px
+  font-size: 13px
+  text-align: center
+  border-bottom: 1px solid hsl(0, 0%, 75%)
+  color: #40AAFF
+  background: #FBFBFB
 
-.nav_page-down
-  margin-top: 15px
+.chatbar
+  z-index: 1
+  position: fixed
+  bottom: 0
+  width: 100%
+  height: 44px
+  min-height: 44px
+  line-height: 44px
+  font-size: 17px
+  background: #F3F3F3
+  border-top: 1px solid hsl(0, 0%, 75%)
+  text-align: center
+  .input
+    position: relative
+    padding-left: 40px
+    padding-right: 60px
+    input
+      width: 100%
+      border: 1px solid hsl(0, 0%, 75%)
+      font-size: 17px
+      border-radius: 3px
+      padding: 3px 7px
+      outline: 0
+      -webkit-appearance: none // remove iOS 7 inner shadow
+  a
+    text-decoration: none
+    color: #4CD964
+    font-size: 19px
+  a.emojibtn
+    position: absolute
+    left: 16px
+  a.submitbtn
+    position: absolute
+    right: 8px
 
+.content
+  margin-top: 80px
+  margin-bottom: 60px
+  h2
+    font-size: 15px
+    font-weight: 500
+    line-height: 30px
+    margin-left: 16px
+  .divider
+    height: 15px
 
-// mobile layout
-@media only screen and (max-width : 568px)
-  .body .logs li
-    padding: 10px
-    &:nth-child(odd)
-      background: $row-color-odd
-    &:nth-child(even)
-      background: $row-color-even
+.listview
+  background: white
+  border-top: 1px solid hsl(0, 0%, 75%)
+  border-bottom: 1px solid hsl(0, 0%, 75%)
+  li
+    position: relative
+    padding: 0 16px
+    min-height: 44px
+    height: 44px
+    line-height: 44px
+    &:hover
+      background: hsl(0, 0%, 90%)
+      cursor: pointer
+    &:after
+      content: '〉'
+      display: inline-block
+      position: absolute
+      right: 8px
+      color: #4CD964
+  li + li
+    border-top: 1px solid hsl(0, 0%, 80%)
+
+.mesgview
+  padding: 0 16px
+  background: white
+  line-height: 1.33
+  font-size: 14px
+  color: hsl(0, 0%, 20%)
+  .mesgline
+    position: relative
+  .mesgline + .mesgline
+    margin-top: 16px
+  .meta
+    position: relative
+  .time
+    position: absolute
+    right: 0
+    color: hsl(0, 0%, 75%)
+    font-size: 12px
+  .nick
+    position: absolute
+    left: 0
+    color: #4CD964
+  .mesg
+    text-align: justify
+    @include word-wrap
+    a
+      color: #40AAFF
+      text-decoration: none
+  .mesgline.action
+    .mesg
+      padding-left: 16px
+      font-style: italic
+      &:before
+        content: '*'
+  .mesgline.myself
     .nick
-      width: auto
-    .msg
-      margin-left: 0
-      clear: left
-
-  .nav_page-up,
-  .nav_page-down
-    padding: 1px
-
+      color: #FF9500
+  .mesgline.incoming
+    -webkit-animation: slide-in 300ms
+    animation: slide-in 300ms

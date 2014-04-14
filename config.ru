@@ -2,6 +2,6 @@
 require File.join(File.dirname(__FILE__), "app")
 
 run Rack::URLMap.new \
-  "/" => IRC_Log::App.new,
+  "/" => Logbot::App.new,
   "/comet" => Comet::App.new,
   "/assets" => Rack::Directory.new("public")

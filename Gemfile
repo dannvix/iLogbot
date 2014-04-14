@@ -1,14 +1,14 @@
-source 'http://rubygems.org'
+source "http://rubygems.org"
 
-gem 'rake'
-gem 'foreman'
-gem 'sinatra'
-gem 'async_sinatra'
-gem 'eventmachine'
-gem 'shotgun'
-gem 'compass'
-gem 'haml'
-gem 'sass'
-gem 'redis'
-gem 'redis-namespace'
-gem 'cinch'
+gem "rake"
+gem "foreman"
+gem "sinatra"
+gem "async_sinatra"
+gem "eventmachine"
+gem "shotgun"
+gem "compass"
+gem "haml"
+gem "sass"
+gem "redis"
+gem "redis-namespace"
+gem "cinch"
