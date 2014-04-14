@@ -5,7 +5,7 @@ require "redis-namespace"
 
 # Redis connection
 redis_conn = Redis.new(:thread_safe => true)
-$redis = Redis::Namespace.new(:iLogbot, redis_conn)
+$redis = Redis::Namespace.new(:iLogbot, :redis => redis_conn)
 
 # initialize
 $nick = (ENV["LOGBOT_NICK"] || "testbot_")
@@ -73,9 +73,10 @@ bot = Cinch::Bot.new do
 end
 
 def WatchRedisQueue (ircbot)
-  redis_sub = Redis.new(:thread_safe => true)
+  redis_sub_conn = Redis.new(:thread_safe => true)
+  redis_sub = Redis::Namespace.new(:iLogbot, :redis => redis_sub_conn)
   begin
-    redis_sub.subscribe("iLogbot:mesgqueue") do |on|
+    redis_sub.subscribe("mesgqueue") do |on|
       on.subscribe do |channel, subscriptions|
         puts "Subscribed to ##{channel} (#{subscriptions} subscriptions)"
       end
