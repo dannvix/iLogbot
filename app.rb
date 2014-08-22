@@ -5,6 +5,7 @@ Encoding.default_external = "utf-8"
 require "json"
 require "time"
 require "date"
+require "cgi"
 require "sinatra/base"
 require "sinatra/async"
 require "redis"
@@ -42,6 +43,7 @@ module Logbot
       @mesgs = $redis.lrange("channel:##{channel}:date:#{@date}", 0, -1)
       @mesgs = @mesgs.map do |mesg|
         mesg = JSON.parse(mesg)
+        mesg["mesg"] = CGI.escapeHTML(mesg["mesg"])
         if mesg["mesg"] =~ /^\u0001ACTION (.*)\u0001$/
           mesg["mesg"].gsub!(/^\u0001ACTION (.*)\u0001$/, "\\1")
           mesg["action"] = true
@@ -78,6 +80,7 @@ module Logbot
       @mesgs = $redis.lrange("privchat:#{channel}:date:#{@date}", 0, -1)
       @mesgs = @mesgs.map do |mesg|
         mesg = JSON.parse(mesg)
+        mesg["mesg"] = CGI.escapeHTML(mesg["mesg"])
         if mesg["mesg"] =~ /^\u0001ACTION (.*)\u0001$/
           mesg["mesg"].gsub!(/^\u0001ACTION (.*)\u0001$/, "\\1")
           mesg["action"] = true
@@ -107,14 +110,22 @@ module Comet
 
     get %r{/poll/channel/(.*)/([\d\.]+)} do |channel, time|
       date = Time.at(time.to_f).strftime("%Y-%m-%d")
-      mesgs = $redis.lrange("channel:##{channel}:date:#{date}", -10, -1).map { |mesg| ::JSON.parse(mesg) }
+      mesgs = $redis.lrange("channel:##{channel}:date:#{date}", -10, -1).map {|mesg|
+        ret = JSON.parse(mesg)
+        ret["mesg"] = CGI.escapeHTML(ret["mesg"])
+        ret
+      }
       if (not mesgs.empty?) && mesgs[-1]["time"] > time
         return mesgs.select { |mesg| mesg["time"] > time }.to_json
       end
 
       EventMachine.run do
         n, timer = 0, EventMachine::PeriodicTimer.new(0.5) do
-          mesgs = $redis.lrange("channel:##{channel}:date:#{date}", -10, -1).map { |msg| ::JSON.parse(msg) }
+          mesgs = $redis.lrange("channel:##{channel}:date:#{date}", -10, -1).map {|msg|
+            ret = JSON.parse(msg)
+            ret["mesg"] = CGI.escapeHTML(ret["mesg"])
+            ret
+          }
           if (not mesgs.empty?) && mesgs[-1]["time"] > time || n > 120
             timer.cancel
             return mesgs.select { |mesg| mesg["time"] > time }.to_json
